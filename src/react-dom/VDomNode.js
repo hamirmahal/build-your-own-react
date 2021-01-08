@@ -1,11 +1,15 @@
 import { instantiateVNode } from './index';
 
 export default class VDomNode {
-    constructor(reactElement) {}
+    constructor(reactElement) {
+        this.reactElement = reactElement;
+    }
 
     getPublicInstance() {}
 
     update() {}
 
-    mount() {}
+    mount() {
+        return document.createElement(this.reactElement.type);
+    }
 }

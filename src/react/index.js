@@ -1,6 +1,23 @@
 import Component from './Component';
 
-const createElement = (type, props, ...children) => {};
+const createElement = (type, props, ...children) => {
+    const newReactType = {};
+    
+    newReactType.type = type;
+
+    newReactType.props = props;
+
+    if (props)
+        newReactType.props.children = [...children.flat()];
+
+    newReactType.$$typeof = Symbol.for("react.element");
+
+    newReactType.ref = null;
+
+    newReactType._owner = null;
+
+    return newReactType;
+};
 
 export default {
     createElement: createElement,
