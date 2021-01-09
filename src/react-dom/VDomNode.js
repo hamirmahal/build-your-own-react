@@ -9,11 +9,11 @@ export default class VDomNode {
 
     update() {}
 
-    /**
-     * @returns {Element} a DOM element with the type of
-     * this VDomNode's reactElement
-     */
     mount() {
+        if (this.reactElement === null || this.reactElement === undefined)
+            return document.createTextNode('');
+        if (typeof this.reactElement === 'number' || typeof this.reactElement === 'string')
+            return document.createTextNode(this.reactElement);
         const domNode = document.createElement(this.reactElement.type);
         const children = getChildrenAsArray(this.reactElement.props);
         const vDomNodeChildren = children.map(instantiateVNode);
