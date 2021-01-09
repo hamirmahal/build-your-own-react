@@ -5,10 +5,10 @@ const createElement = (type, props, ...children) => {
     
     newReactType.type = type;
 
-    newReactType.props = props;
-
-    if (props)
-        newReactType.props.children = [...children.flat()];
+    newReactType.props = {
+        children: [...children.flat()],
+        ...props
+    };
 
     newReactType.$$typeof = Symbol.for("react.element");
 
