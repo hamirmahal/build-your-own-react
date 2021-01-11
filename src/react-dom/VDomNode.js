@@ -21,6 +21,12 @@ export default class VDomNode {
         // 6. https://github.com/hamirmahal/build-your-own-react#6-classname
         // Set the className attribute of the domNode Element.
         domNode.className = this.reactElement.props.className;
+        // 7. https://github.com/hamirmahal/build-your-own-react#7-inline-styles
+        // Set the style attribute of domNode.
+        const { style } = this.reactElement.props;
+        style && Object.entries(style).forEach(([styleProperty, styleValue]) => {
+            domNode.style[styleProperty] = styleValue;
+        });
         const children = getChildrenAsArray(this.reactElement.props);
         const vDomNodeChildren = children.map(instantiateVNode);
         vDomNodeChildren.forEach(vDomNodeChild => {
