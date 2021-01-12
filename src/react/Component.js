@@ -7,7 +7,27 @@ class Component {
         this.props = props
     }
 
-    setState(state) {}
+    /**
+     * merges the parameter state into the existing state,
+     * unless the parameter state is undefined or null, in
+     * which case this method does nothing.
+     * 
+     * See
+     * https://github.com/hamirmahal/build-your-own-react#12-state.
+     * 
+     * @param {object} state is what to merge into the existing
+     * state. It might be undefined or null, or a function.
+     * @returns {void} nothing
+     */
+    // 12. https://github.com/hamirmahal/build-your-own-react#12-state
+    // Make the Component class stateful.
+    setState(state) {
+        if (state === null || state === undefined)
+            return;
+        if (typeof state === 'function')
+            state(this.state);
+        this.state = { ...this.state, ...state };
+    }
 
     // 10. https://github.com/hamirmahal/build-your-own-react#10-react-class-components
     // Begin implementation of React class components.
