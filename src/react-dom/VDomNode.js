@@ -28,6 +28,10 @@ export default class VDomNode {
                 Object.entries(props.style).forEach(([styleProperty, styleValue]) => {
                     domNode.style[styleProperty] = styleValue;
                 });
+            // 9. https://github.com/hamirmahal/build-your-own-react#9-events
+            // Add event listeners for each of the attributes that start with "on".
+            else if (propKey.substring(0,2) === "on")
+                domNode.addEventListener(propKey.substring(2).toLowerCase(), propValue);
             else
                 domNode.setAttribute(propKey, propValue);
         });
