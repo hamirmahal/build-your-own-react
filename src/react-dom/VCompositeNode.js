@@ -24,19 +24,41 @@ export default class VCompositeNode {
      * renders, instantiates, mounts
      * and returns a React functional
      * component or React class component.
+     * @param {object} classCache a class
+     * cache object that saves component
+     * instances between renders. It has
+     * a cache property that is an array
+     * and an int index property.
      * @returns {*} a mounted Node
      */
-    mount() {
-        // 11. https://github.com/hamirmahal/build-your-own-react#11-render-react-class-component
+    mount(classCache) {
+        // github.com/hamirmahal/build-your-own-react#11-render-react-class-component
         // Extend mount() so it is capable of mounting class components.
         if (this.reactElement.type.prototype.isReactComponent) {
+            // github.com/hamirmahal/build-your-own-react#13-rerendering-with-state
+            // Increase the cache's index property and get the element at that index.
+            const element = classCache.cache[++classCache.index];
+            // github.com/hamirmahal/build-your-own-react#13-rerendering-with-state
+            // If the element is defined, use it, and update its props attribute.
+            if (element) {
+                // Add the class instance to the cache.
+                element.props = this.reactElement.props;
+                classCache.cache[classCache.index] = element;
+                const reactElement = element.render();
+                const virtualNode = instantiateVNode(reactElement);
+                return virtualNode.mount(classCache);
+            }
             const classComponent = new this.reactElement.type(this.reactElement.props);
+            // github.com/hamirmahal/build-your-own-react#13-rerendering-with-state
+            // Add the class instance to the cache.
+            classComponent.props = this.reactElement.props;
+            classCache.cache[classCache.index] = classComponent;
             const reactElement = classComponent.render();
             const virtualNode = instantiateVNode(reactElement);
-            return virtualNode.mount();
+            return virtualNode.mount(classCache);
         }
         const renderedComponent = this.reactElement.type(this.reactElement.props);
         const vNode = instantiateVNode(renderedComponent);
-        return vNode.mount();
+        return vNode.mount(classCache);
     }
 }

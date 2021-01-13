@@ -42,9 +42,11 @@ export default class VDomNode {
     update() {}
 
     /**
+     * @param {object} cache a class cache that saves
+     * component instances between renders.
      * @returns {Element | Text} a non-virtual DOM node
      */
-    mount() {
+    mount(cache) {
         if (this.reactElement === null || this.reactElement === undefined)
             return document.createTextNode('');
         if (typeof this.reactElement === 'number' || typeof this.reactElement === 'string')
@@ -56,7 +58,9 @@ export default class VDomNode {
         const children = getChildrenAsArray(this.reactElement.props);
         const vDomNodeChildren = children.map(instantiateVNode);
         vDomNodeChildren.forEach(vDomNodeChild => {
-            const mountedVDomNodeChild = vDomNodeChild.mount();
+            // github.com/hamirmahal/build-your-own-react#13-rerendering-with-state
+            // Pass cache to the next call to mount(cache).
+            const mountedVDomNodeChild = vDomNodeChild.mount(cache);
             domNode.appendChild(mountedVDomNodeChild);
         });
         return domNode;
